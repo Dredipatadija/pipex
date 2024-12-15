@@ -16,7 +16,7 @@ int	ft_openin(char *file)
 	return (fd);
 }
 
-int	fd_openout(char *file)
+int	ft_openout(char *file)
 {
 	int	fd;
 
