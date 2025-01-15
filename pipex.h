@@ -26,5 +26,7 @@ int		ft_openout(char *file);
 char	*ft_getpath(char *cmd, char **envp);
 char	*ft_getenv(char *str, char **envp);
 void	*ft_freearray(char **array);
+void	ft_error1(char *str);
+void	ft_error2(char *str, int fd);
 
 #endif

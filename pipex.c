@@ -19,14 +19,14 @@ void	ft_parent(char **argv, int *pipefd, char **envp, int outfd)
 
 	pid1 = fork();
 	if (pid1 == -1)
-		MSJ ERROR, CLOSE OUTFD Y EXIT
+		ft_error2("'fork' function failure to the 1st child\n", outfd);
 	if (pid1 == 0)
 		ft_child1(argv, pipefd, envp, outfd);
 	else
 	{
 		pid2 = fork();
 		if (pid2 == -1)
-			MENSAJE DE ERROR, CLOSE OUTFD Y EXIT
+			ft_error2("'fork' function failure to the 2nd child\n", outfd);
 		close(pipefd[1]);
 		if (pid2 == 0)
 			ft_child2(argv, pipefd, envp, outfd);
@@ -44,7 +44,7 @@ void	ft_child1(char **argv, int *pipefd, char **envp, int outfd)
 	close(pipefd[0]);
 	close(outfd);
 	if (dup2(pipefd[1], 1) == -1)
-		MSJ ERROR Y SALIDA;
+		ft_error1("'dup2' function failure in the 1st child\n");
 	close(pipefd[1]);
 	ft_execute(argv[2], envp);
 }
@@ -56,13 +56,14 @@ void	ft_child2(char *cmd, int *pipefd, char **envp, int outfd)
 
 	close(pipefd[1]);
 	if (dup2(outfd, 1) == -1)
-		MSJ ERROR, CLOSE OUTFD Y SALIDA;
+		ft_error2("'dup2' function failure with outfile fd\n", outfd);
 	close(outfd);
 	if (dup2(pipefd[0], 0) == -1)
-		MSJ ERROR Y SALIDA.
+		ft_error1("'dup2' function failure in the 2nd child\n");
 	close(pipefd[0]);
 	ft_execute(argv[3], envp);
 }
+
 void	ft_execute(char *cmd, char **envp)
 {
 	char	**str_cmd;
@@ -79,7 +80,10 @@ void	ft_execute(char *cmd, char **envp)
 	if (path != NULL && access(path, X_OK) == 0)
 		execve(path, str_cmd, envp);
 	else
-		MSJ ERROR, LIBERAR STR_CMD Y SALIDA;
+	{
+		ft_freearray(str_cmd);
+		ft_error1("Command not found or not executable");
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -89,14 +93,14 @@ int	main(int argc, char **argv, char **envp)
 	int	outfd;
 
 	if (argc != 5)
-		MSJ ERROR Y SALIDA!!!
+		ft_error1("Try with './pipex infile cmd cmd outfile'\n");
 	if (pipe(pipefd) == -1)
-		MSJ ERROR Y SALIDA!!!
+		ft_error1("'pipe' function failure\n");
 	infd = ft_openin(argv[1]);
 	if (infd > 0)
 	{
 		if (dup2(infd, 0) == -1)
-			MSJ ERROR, CLOSE INTFD Y SALIDA!!!
+			ft_error2("'dup2' function failure with infile fd\n", infd);
 		close(infd);
 	}
 	outfd = ft_openout(argv[4]);
