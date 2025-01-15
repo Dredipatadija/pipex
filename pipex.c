@@ -46,7 +46,7 @@ void	ft_child1(char **argv, int *pipefd, char **envp, int outfd)
 	if (dup2(pipefd[1], 1) == -1)
 		MSJ ERROR Y SALIDA;
 	close(pipefd[1]);
-	ft_execute(argv, envp, outfd);
+	ft_execute(argv[2], envp);
 }
 
 void	ft_child2(char *cmd, int *pipefd, char **envp, int outfd)
@@ -61,7 +61,25 @@ void	ft_child2(char *cmd, int *pipefd, char **envp, int outfd)
 	if (dup2(pipefd[0], 0) == -1)
 		MSJ ERROR Y SALIDA.
 	close(pipefd[0]);
-	ft_execute(argv, envp, outfd);
+	ft_execute(argv[3], envp);
+}
+void	ft_execute(char *cmd, char **envp)
+{
+	char	**str_cmd;
+	char	*path;
+
+	str_cmd = ft_split(cmd, ' ');
+	if (str_cmd[0][0] != '.' && str_cmd[0][0] != '/')
+		path = ft_getpath(envp);
+	else
+	{
+		if (access(cmd, F_OK) == 0)
+			path = str_cmd[0];
+	}
+	if (path != NULL && access(path, X_OK) == 0)
+		execve(path, str_cmd, envp);
+	else
+		MSJ ERROR, LIBERAR STR_CMD Y SALIDA;
 }
 
 int	main(int argc, char **argv, char **envp)
