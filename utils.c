@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-void	*ft_freearray(**array)
+void	*ft_freearray(char **array)
 {
 	int	i;
 
