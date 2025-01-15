@@ -35,3 +35,29 @@ int	ft_openout(char *file)
 	fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	return (fd);
 }
+
+char	*ft_getpath(char *cmd, char **envp)
+{
+	int		i;
+	int		j;
+	char	*path;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		{
+			j = 5;
+			while (envp[i][j] != '\0')
+			{
+				if (envp[i][j] == ':')
+					path = ft_strjoin(ft_strjoin(
+								ft_strjoin(ft_substr(
+										envp[i], 5, j - 5), "/"), cmd));
+				j++;
+			}
+		}
+		i++;
+	}
+	return (path);
+}
