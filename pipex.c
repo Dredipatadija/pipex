@@ -102,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	outfd = ft_openout(argv[4]);
 	if (infd == -1)
 		ft_child2(argv[3], pipefd, envp, outfd);
-	else 
+	else
 		ft_parent(argv, pipefd, envp, outfd);
 	return (0);
 }

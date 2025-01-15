@@ -78,4 +78,26 @@ char	*ft_getpath(char *cmd, char **envp)
 	return (ft_freearray(wholepath));
 }
 
-ft_getenv()
+char	*ft_getenv(char *str, char **envp)
+{
+	int		i;
+	int		j;
+	char	*var;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		j = 0;
+		while (env[i][j] != '\0' && env[i][j] != '=')
+			j++;
+		var = ft_substr(envp[i], 0, j);
+		if (ft_strncmp(var, str, ft_strlen(str)) == 0)
+		{
+			free(var);
+			return (envp[i] + j + 1);
+		}
+		free(var);
+		i++;
+	}
+	return (NULL);
+}
