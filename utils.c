@@ -12,6 +12,20 @@
 
 #include "pipex.h"
 
+void	*ft_freearray(**array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i] != NULL)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+	return (NULL);
+}
+
 int	ft_openin(char *file)
 {
 	int	fd;
@@ -39,25 +53,27 @@ int	ft_openout(char *file)
 char	*ft_getpath(char *cmd, char **envp)
 {
 	int		i;
-	int		j;
+	char	**wholepath;
 	char	*path;
+	char	*pathcmd;
 
 	i = 0;
-	while (envp[i] != NULL)
+	if (ft_getenv("PATH", envp) == NULL && access(cmd, 0) == 0)
+		return (cmd);
+	if (ft_getenv("PATH", envp) == NULL)
+		return (NULL);
+	wholepath = ft_split(ft_getenv("PATH", envp), ':');
+	while (wholepath[i] != NULL)
 	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		path = ft_strjoin(wholepath[i], "/");
+		pathcmd = ft_strjoin(path, cmd);
+		free(path);
+		if (access(pathcmd, F_OK | X_OK) == 0)
 		{
-			j = 5;
-			while (envp[i][j] != '\0')
-			{
-				if (envp[i][j] == ':')
-					path = ft_strjoin(ft_strjoin(
-								ft_strjoin(ft_substr(
-										envp[i], 5, j - 5), "/"), cmd));
-				j++;
-			}
+			ft_freearray(wholepath);
+			return (pathcmd);
 		}
-		i++;
+		free(pathcmd);
 	}
-	return (path);
+	return (ft_freearray(wholepath));
 }
