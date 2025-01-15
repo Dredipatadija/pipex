@@ -77,3 +77,5 @@ char	*ft_getpath(char *cmd, char **envp)
 	}
 	return (ft_freearray(wholepath));
 }
+
+ft_getenv()
