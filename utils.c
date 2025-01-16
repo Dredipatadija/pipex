@@ -88,7 +88,7 @@ char	*ft_getenv(char *str, char **envp)
 	while (envp[i] != NULL)
 	{
 		j = 0;
-		while (env[i][j] != '\0' && env[i][j] != '=')
+		while (envp[i][j] != '\0' && envp[i][j] != '=')
 			j++;
 		var = ft_substr(envp[i], 0, j);
 		if (ft_strncmp(var, str, ft_strlen(str)) == 0)

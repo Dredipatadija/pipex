@@ -32,7 +32,8 @@ void	ft_parent(char **argv, int *pipefd, char **envp, int outfd)
 			ft_child2(argv, pipefd, envp, outfd);
 		else
 		{
-			close_fds(pipefd[0], outfd);
+			close(pipefd[0]);
+			close(outfd);
 			waitpid(pid1, NULL, 0);
 			waitpid(pid2, NULL, 0);
 		}
@@ -49,11 +50,8 @@ void	ft_child1(char **argv, int *pipefd, char **envp, int outfd)
 	ft_execute(argv[2], envp);
 }
 
-void	ft_child2(char *cmd, int *pipefd, char **envp, int outfd)
+void	ft_child2(char **argv, int *pipefd, char **envp, int outfd)
 {
-	char	**s_cmd;
-	char	*path;
-
 	close(pipefd[1]);
 	if (dup2(outfd, 1) == -1)
 		ft_error2("'dup2' function failure with outfile fd\n", outfd);
@@ -71,7 +69,7 @@ void	ft_execute(char *cmd, char **envp)
 
 	str_cmd = ft_split(cmd, ' ');
 	if (str_cmd[0][0] != '.' && str_cmd[0][0] != '/')
-		path = ft_getpath(envp);
+		path = ft_getpath("PATH", envp);
 	else
 	{
 		if (access(cmd, F_OK) == 0)
@@ -105,7 +103,7 @@ int	main(int argc, char **argv, char **envp)
 	}
 	outfd = ft_openout(argv[4]);
 	if (infd == -1)
-		ft_child2(argv[3], pipefd, envp, outfd);
+		ft_child2(argv, pipefd, envp, outfd);
 	else
 		ft_parent(argv, pipefd, envp, outfd);
 	return (0);

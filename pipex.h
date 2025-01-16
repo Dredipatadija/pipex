@@ -15,12 +15,17 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
+# include <libft.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+
 
 int		main(int argc, char **argv, char **envp);
 void	ft_execute(char *cmd, char **envp);
 void	ft_parent(char **argv, int *pipefd, char **envp, int outfd);
 void	ft_child1(char **argv, int *pipefd, char **envp, int outfd);
-void	ft_child2(char *cmd, int *pipefd, char **envp, int outfd);
+void	ft_child2(char **argv, int *pipefd, char **envp, int outfd);
 int		ft_openin(char *file);
 int		ft_openout(char *file);
 char	*ft_getpath(char *cmd, char **envp);
