@@ -42,11 +42,22 @@ int	ft_openin(char *file)
 	return (fd);
 }
 
-int	ft_openout(char *file)
+int	ft_openout(char *file, int *pipefd, int bool)
 {
 	int	fd;
 
 	fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	if (fd < 0)
+	{
+		if (access(file, F_OK) == 0)
+			perror("Permission denied:");
+		write(2, file, ft_strlen(file));
+		close(pipefd[0]);
+		close(pipefd[1]);
+		if (bool == 1)
+			wait(NULL);
+		exit(1);
+	}
 	return (fd);
 }
 
@@ -74,6 +85,7 @@ char	*ft_getpath(char *cmd, char **envp)
 			return (pathcmd);
 		}
 		free(pathcmd);
+		i++;
 	}
 	return (ft_freearray(wholepath));
 }

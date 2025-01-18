@@ -23,15 +23,17 @@
 
 int		main(int argc, char **argv, char **envp);
 void	ft_execute(char *cmd, char **envp);
-void	ft_parent(char **argv, int *pipefd, char **envp, int outfd);
-void	ft_child1(char **argv, int *pipefd, char **envp, int outfd);
+void	ft_parent(char **argv, int *pipefd, char **envp);
+void	ft_child1(char **argv, int *pipefd, char **envp);
 void	ft_child2(char **argv, int *pipefd, char **envp, int outfd);
 int		ft_openin(char *file);
-int		ft_openout(char *file);
+int		ft_openout(char *file, int *pipefd, int bool);
 char	*ft_getpath(char *cmd, char **envp);
 char	*ft_getenv(char *str, char **envp);
 void	*ft_freearray(char **array);
 void	ft_error1(char *str);
 void	ft_error2(char *str, int fd);
+void	ft_error3(char *str);
+void	ft_endparent(int *pipefd, int outfd, int pid1, int pid2);
 
 #endif

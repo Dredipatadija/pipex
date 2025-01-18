@@ -12,18 +12,20 @@
 
 #include "pipex.h"
 
-void	ft_parent(char **argv, int *pipefd, char **envp, int outfd)
+void	ft_parent(char **argv, int *pipefd, char **envp)
 {
 	pid_t	pid1;
 	pid_t	pid2;
+	int		outfd;
 
 	pid1 = fork();
 	if (pid1 == -1)
-		ft_error2("'fork' function failure to the 1st child\n", outfd);
+		ft_error1("'fork' function failure to the 1st child\n");
 	if (pid1 == 0)
-		ft_child1(argv, pipefd, envp, outfd);
+		ft_child1(argv, pipefd, envp);
 	else
 	{
+		outfd = ft_openout(argv[4], pipefd, 1);
 		pid2 = fork();
 		if (pid2 == -1)
 			ft_error2("'fork' function failure to the 2nd child\n", outfd);
@@ -31,19 +33,13 @@ void	ft_parent(char **argv, int *pipefd, char **envp, int outfd)
 		if (pid2 == 0)
 			ft_child2(argv, pipefd, envp, outfd);
 		else
-		{
-			close(pipefd[0]);
-			close(outfd);
-			waitpid(pid1, NULL, 0);
-			waitpid(pid2, NULL, 0);
-		}
+			ft_endparent(pipefd, outfd, pid1, pid2);
 	}
 }
 
-void	ft_child1(char **argv, int *pipefd, char **envp, int outfd)
+void	ft_child1(char **argv, int *pipefd, char **envp)
 {
 	close(pipefd[0]);
-	close(outfd);
 	if (dup2(pipefd[1], 1) == -1)
 		ft_error1("'dup2' function failure in the 1st child\n");
 	close(pipefd[1]);
@@ -69,18 +65,20 @@ void	ft_execute(char *cmd, char **envp)
 
 	str_cmd = ft_split(cmd, ' ');
 	if (str_cmd[0][0] != '.' && str_cmd[0][0] != '/')
-		path = ft_getpath("PATH", envp);
+		path = ft_getpath(str_cmd[0], envp);
 	else
 	{
 		if (access(cmd, F_OK) == 0)
 			path = str_cmd[0];
+		else
+			path = NULL;
 	}
 	if (path != NULL && access(path, X_OK) == 0)
 		execve(path, str_cmd, envp);
 	else
 	{
 		ft_freearray(str_cmd);
-		ft_error1("Command not found or not executable");
+		ft_error3("Command not found or not executable\n");
 	}
 }
 
@@ -101,10 +99,12 @@ int	main(int argc, char **argv, char **envp)
 			ft_error2("'dup2' function failure with infile fd\n", infd);
 		close(infd);
 	}
-	outfd = ft_openout(argv[4]);
-	if (infd == -1)
+	if (infd < 0)
+	{
+		outfd = ft_openout(argv[4], pipefd, 0);
 		ft_child2(argv, pipefd, envp, outfd);
+	}
 	else
-		ft_parent(argv, pipefd, envp, outfd);
+		ft_parent(argv, pipefd, envp);
 	return (0);
 }
