@@ -34,10 +34,10 @@ int	ft_openin(char *file)
 	if (fd == -1)
 	{
 		if (access(file, F_OK) == 0)
-			perror("Permission denied:");
+			ft_putstr_fd("pipex: permission denied: ", 2);
 		else
-			perror("File not found: ");
-		write(2, file, ft_strlen(file));
+			ft_putstr_fd("pipex: no such file or directory: ", 2);
+		ft_putendl_fd(file, 2);
 	}
 	return (fd);
 }

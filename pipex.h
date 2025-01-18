@@ -31,8 +31,8 @@ char	*ft_getpath(char *cmd, char **envp);
 char	*ft_getenv(char *str, char **envp);
 void	*ft_freearray(char **array);
 void	ft_error1(char *str);
-void	ft_error2(char *str, int fd);
-void	ft_error3(char *str);
+void	ft_error2(char *str, int fd, int *pipefd);
+void	ft_error3(char *str, char *cmd);
 void	ft_endparent(int *pipefd, int outfd, int pid1, int pid2);
 
 #endif
