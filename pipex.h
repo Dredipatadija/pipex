@@ -20,7 +20,6 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-
 int		main(int argc, char **argv, char **envp);
 void	ft_execute(char *cmd, char **envp);
 void	ft_parent(char **argv, int *pipefd, char **envp);
