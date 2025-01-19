@@ -41,7 +41,7 @@ void	ft_child1(char **argv, int *pipefd, char **envp)
 {
 	close(pipefd[0]);
 	if (dup2(pipefd[1], 1) == -1)
-		ft_error1("'dup2' function failure in the 1st child\n");
+		ft_error1("pipex: 'dup2' failure in the 1st child\n");
 	close(pipefd[1]);
 	ft_execute(argv[2], envp);
 }
