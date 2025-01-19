@@ -20,7 +20,7 @@ void	ft_parent(char **argv, int *pipefd, char **envp)
 
 	pid1 = fork();
 	if (pid1 == -1)
-		ft_error1("'fork' failure to the 1st child\n");
+		ft_error1("pipex: 'fork' failure at 1st child\n");
 	if (pid1 == 0)
 		ft_child1(argv, pipefd, envp);
 	else
@@ -28,7 +28,7 @@ void	ft_parent(char **argv, int *pipefd, char **envp)
 		outfd = ft_openout(argv[4], pipefd, 1);
 		pid2 = fork();
 		if (pid2 == -1)
-			ft_error2("'fork' failure to the 2nd child\n", outfd, pipefd);
+			ft_error2("pipex: 'fork' failure at 2nd child\n", outfd, pipefd);
 		close(pipefd[1]);
 		if (pid2 == 0)
 			ft_child2(argv, pipefd, envp, outfd);
@@ -50,10 +50,10 @@ void	ft_child2(char **argv, int *pipefd, char **envp, int outfd)
 {
 	close(pipefd[1]);
 	if (dup2(outfd, 1) == -1)
-		ft_error2("'dup2' failure with outfile fd\n", outfd, pipefd);
+		ft_error2("pipex: 'dup2' failure with outfile fd\n", outfd, pipefd);
 	close(outfd);
 	if (dup2(pipefd[0], 0) == -1)
-		ft_error1("'dup2' failure in the 2nd child\n");
+		ft_error1("pipex: 'dup2' failure in the 2nd child\n");
 	close(pipefd[0]);
 	ft_execute(argv[3], envp);
 }
@@ -78,7 +78,7 @@ void	ft_execute(char *cmd, char **envp)
 	else
 	{
 		ft_freearray(str_cmd);
-		ft_error3("Command not found: ", cmd);
+		ft_error3("pipex: command not found: ", cmd);
 	}
 }
 
