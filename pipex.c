@@ -99,7 +99,6 @@ int	main(int argc, char **argv, char **envp)
 			ft_error2("pipex: 'dup2' failure on infile fd\n", infd, pipefd);
 		close(infd);
 	}
-	//hasta aquí están comprobados los leaks en caso de error
 	if (infd < 0)
 	{
 		outfd = ft_openout(argv[4], pipefd, 0);
