@@ -50,8 +50,10 @@ int	ft_openout(char *file, int *pipefd, int bool)
 	if (fd < 0)
 	{
 		if (access(file, F_OK) == 0)
-			perror("Permission denied:");
-		write(2, file, ft_strlen(file));
+		{
+			ft_putstr_fd("pipex: permission denied: ", 2);
+			ft_putendl_fd(file, 2);
+		}
 		close(pipefd[0]);
 		close(pipefd[1]);
 		if (bool == 1)
