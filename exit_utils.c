@@ -37,6 +37,8 @@ void	ft_endparent(int *pipefd, int outfd, int pid1, int pid2)
 	close(outfd);
 	waitpid(pid1, &status1, 0);
 	waitpid(pid2, &status2, 0);
+	if (status1 != 0)
+		exit(WEXITSTATUS(status1));
 	if (status2 != 0)
 		exit(WEXITSTATUS(status2));
 }
