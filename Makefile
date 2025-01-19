@@ -12,7 +12,7 @@
 
 NAME = pipex
 
-CC = gcc
+CC = cc
 
 CFLAGS = -Wextra -Werror -Wall -I$(INC) -I$(LIBFT_DIR)
 
