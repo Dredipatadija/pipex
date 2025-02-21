@@ -11,5 +11,6 @@ typedef struct	s_list
 typedef struct	s_pipe
 {
 	int		n_cmds;
+	int		hered;
 	t_list	*list;
 }					t_pipe;
