@@ -6,7 +6,7 @@ typedef struct	s_list
 	char			*cmd;
 	int				fd;
 	struct s_list	*next;
-}				  	t_list;
+}						t_list;
 
 typedef struct	s_pipe
 {
