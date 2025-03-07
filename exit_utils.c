@@ -43,10 +43,19 @@ void	ft_endparent(int *pipefd, int outfd, int pid1, int pid2)
 		exit(WEXITSTATUS(status2));
 }
 
-void	ft_error3(char *str, char *cmd)
+void	ft_error3(char *str, char *cmd, char *s)
 {
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(s, 2);
 	ft_putchar_fd('\n', 2);
 	exit(127);
+}
+
+void	ft_error4(char *str, char *file, char *s)
+{
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(file, 2);
+	ft_putstr_fd(s, 2);
+	ft_putchar_fd('\n', 2);
 }

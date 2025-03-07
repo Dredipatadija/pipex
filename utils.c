@@ -30,14 +30,26 @@ int	ft_openin(char *file)
 {
 	int	fd;
 
+	if (file[0] == '\0')
+	{
+		ft_putstr_fd("pipex: no such file or directory\n", 2);
+		return (-1);
+	}
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
 		if (access(file, F_OK) == 0)
-			ft_putstr_fd("pipex: permission denied: ", 2);
+		{
+			ft_putstr_fd("pipex: ", 2);
+			ft_putstr_fd(file, 2);
+			ft_putstr_fd(": permission denied\n", 2);
+		}
 		else
-			ft_putstr_fd("pipex: no such file or directory: ", 2);
-		ft_putendl_fd(file, 2);
+		{
+			ft_putstr_fd("pipex: ", 2);
+			ft_putstr_fd(file, 2);
+			ft_putstr_fd(": no such file or directory\n", 2);
+		}
 	}
 	return (fd);
 }
@@ -49,11 +61,10 @@ int	ft_openout(char *file, int *pipefd, int bool)
 	fd = open(file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd < 0)
 	{
-		if (access(file, F_OK) == 0)
-		{
-			ft_putstr_fd("pipex: permission denied: ", 2);
-			ft_putendl_fd(file, 2);
-		}
+		if (file[0] == '\0')
+			ft_putstr_fd("pipex: no such file or directory\n", 2);
+		else if (access(file, F_OK) == 0)
+			ft_error4("pipex: ", file, ": permission denied");
 		close(pipefd[0]);
 		close(pipefd[1]);
 		if (bool == 1)

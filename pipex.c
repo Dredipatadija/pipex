@@ -41,7 +41,7 @@ void	ft_child1(char **argv, int *pipefd, char **envp)
 {
 	close(pipefd[0]);
 	if (dup2(pipefd[1], 1) == -1)
-		ft_error1("pipex: 'dup2' failure in the 1st child\n");
+		ft_error1("pipex: 'dup2' failure at 1st child\n");
 	close(pipefd[1]);
 	ft_execute(argv[2], envp);
 }
@@ -53,7 +53,7 @@ void	ft_child2(char **argv, int *pipefd, char **envp, int outfd)
 		ft_error2("pipex: 'dup2' failure with outfile fd\n", outfd, pipefd);
 	close(outfd);
 	if (dup2(pipefd[0], 0) == -1)
-		ft_error1("pipex: 'dup2' failure in the 2nd child\n");
+		ft_error1("pipex: 'dup2' failure at 2nd child\n");
 	close(pipefd[0]);
 	ft_execute(argv[3], envp);
 }
@@ -63,6 +63,8 @@ void	ft_execute(char *cmd, char **envp)
 	char	**str_cmd;
 	char	*path;
 
+	if (cmd[0] == '\0')
+		ft_error3("pipex: command ", "''", " not found");
 	str_cmd = ft_split(cmd, ' ');
 	if (str_cmd[0][0] != '.' && str_cmd[0][0] != '/')
 		path = ft_getpath(str_cmd[0], envp);
@@ -78,7 +80,7 @@ void	ft_execute(char *cmd, char **envp)
 	else
 	{
 		ft_freearray(str_cmd);
-		ft_error3("pipex: command not found: ", cmd);
+		ft_error3("pipex: command ", cmd, " not found");
 	}
 }
 
@@ -96,7 +98,7 @@ int	main(int argc, char **argv, char **envp)
 	if (infd > 0)
 	{
 		if (dup2(infd, 0) == -1)
-			ft_error2("pipex: 'dup2' failure on infile fd\n", infd, pipefd);
+			ft_error2("pipex: 'dup2' failure at infile fd\n", infd, pipefd);
 		close(infd);
 	}
 	if (infd < 0)
