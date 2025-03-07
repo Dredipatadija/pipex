@@ -26,7 +26,7 @@ LIBFT = $(LIBFT_DIR)libft.a
 SRCS_DIR = ./
 OBJS_DIR = objects/
 
-SRCS_FILES = $(wildcard $(SRCS_DIR)*.c)
+SRCS_FILES = pipex.c utils.c exit_utils.c
 OBJS_FILES = $(SRCS_FILES:.c=.o)
 
 SRCS = $(addprefix $(SRCS_DIR), $(SRCS_FILES))
